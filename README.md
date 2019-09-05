@@ -3,7 +3,7 @@
 
 API para administrar y gestionar cuentas de usuarios e información de los canales del servidor
 
-### `Configuraciones`
+### Configuraciones
 
 Para realizar peticiones a la *API*, primero se deben configurar lo parámetros de conexión a la base de datos,
 modificando en el archivo `application/config/database.php` los siguientes campos:
@@ -19,13 +19,13 @@ Luego, se debe modificar el archivo `application/libraries/Teamspeak.php` indica
     private $username = 'serveradmin_query_name';
     private $password = 'serveradmin_query_pass';
 ```
-### `Uso`
+### Uso
 
 Puede enviar solicitudes del tipo *GET*, *POST*, *PUT*, *DELETE*, que contengan datos en formato *JSON* a la dirección
 donde se encuentre instalada la aplicación (Por defecto: [`http://localhost/api/index.php/`](http://localhost/api/index.php/))
 e indicando el nombre del controlador.
 
-#### `Ejemplos`
+### Ejemplos
 
 #### Consulta de canales creados.
 
