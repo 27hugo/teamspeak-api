@@ -13,21 +13,21 @@ class Channels_model extends CI_Model{
             if ($result->num_rows() === 1) {
                 return $result->row_object();
             }
-            return null;
+            throw new Exception('El canal indicado no existe');
         }
     
         $result = $this->db->get('canales');
         if ($result->num_rows() > 0) {
             return $result->result_object();
         }
-        return null;
+        throw new Exception('No se han creado canales aun');
     }
     
     public function createChannel( $channel ){
         $this->db->insert('canales', $channel );
         if($this->db->affected_rows() > 0)
             return true;
-        return null;
+        throw new Exception('Ocurrió un error al crear canal');
     }
 
     public function getByCliId($cli_id){
@@ -35,7 +35,7 @@ class Channels_model extends CI_Model{
         if ($result->num_rows() > 0) {
             return $result->result_object();
         }
-        return null;
+        throw new Exception('El cliente no registra ningun canal');
     }
 
     public function getChannelsBetweenMonths( $first_date, $second_date ){
@@ -45,7 +45,7 @@ class Channels_model extends CI_Model{
         if ($result->num_rows() > 0) {
             return $result->result_object();
         }
-        return null;    
+        throw new Exception('No existen canales en las fechas indicadas');    
     }
 
     public function updateChannelName( $channel ){  
@@ -55,7 +55,7 @@ class Channels_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            return null;
+            throw new Exception('Ocurrió un error al actualizar el canal');
     }
 
     public function updateChannelPassword( $channel ){  
@@ -65,7 +65,7 @@ class Channels_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            return null;
+            throw new Exception('Ocurrió un error al actualizar el canal');
     }
 
     public function deleteChannel( $channel_id){
@@ -74,6 +74,6 @@ class Channels_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            return null;
+            throw new Exception('Ocurrió un error al eliminar el canal');
     }
 }
