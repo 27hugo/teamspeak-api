@@ -5,9 +5,9 @@ require_once( APPPATH.'third_party/teamspeak3/TeamSpeak3.php' );
 
 class Teamspeak{
 
-    private $host = 'owc.cl';
-    private $username = 'fer';
-    private $password = 'KJMipyCz';
+    private $host = '';
+    private $username = '';
+    private $password = '';
     private $port = '9987';
     private $queryport = '10011';
     
