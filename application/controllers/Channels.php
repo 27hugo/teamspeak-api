@@ -5,11 +5,20 @@ require_once APPPATH . '/libraries/REST_Controller.php';
 
 
 class Channels extends REST_Controller{
+
+    private $authorization;
+
     public function __construct(){
         parent::__construct();
         $this->load->model('channels_model');
         $this->load->library('teamspeak');   
         date_default_timezone_set('America/Santiago');
+        $this->load->library('authorizationtoken');
+        $this->authorization = $this->authorizationtoken->validateToken();
+
+        if( $this->authorization['status'] == false)
+            $this->response( array('error' => $this->authorization['message']) , REST_Controller::HTTP_BAD_REQUEST);
+       
     }
 
     public function index_get(){
@@ -114,7 +123,7 @@ class Channels extends REST_Controller{
             'can_cli_ts_id' => null,
             'can_nombre'  => $this->post('can_nombre'),
             'can_contrasena' => $this->post('can_contrasena'),
-            'can_creacion' => date('Y-m-d G:i:s'),
+            'can_creacion' => date('Y-m-d H:i:s'),
             'can_permisos' => null
         );
 

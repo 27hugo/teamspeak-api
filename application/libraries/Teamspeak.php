@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once( APPPATH.'libraries/TeamSpeak3/TeamSpeak3.php' );
+require_once( APPPATH.'third_party/teamspeak3/TeamSpeak3.php' );
 
 class Teamspeak{
 
-    private $host = '';
-    private $username = '';
-    private $password = '';
+    private $host = 'owc.cl';
+    private $username = 'fer';
+    private $password = 'KJMipyCz';
     private $port = '9987';
     private $queryport = '10011';
     
