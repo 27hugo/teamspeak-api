@@ -5,22 +5,28 @@ require_once APPPATH . '/libraries/REST_Controller.php';
 
 
 class Channels extends REST_Controller{
+
+    private $authorization;
+
     public function __construct(){
         parent::__construct();
         $this->load->model('channels_model');
         $this->load->library('teamspeak');   
         date_default_timezone_set('America/Santiago');
+        $this->load->library('authorizationtoken');
+        $this->authorization = $this->authorizationtoken->validateToken();
+
+        if( $this->authorization['status'] == false)
+            $this->response( array('error' => $this->authorization['message']) , REST_Controller::HTTP_BAD_REQUEST);
+       
     }
 
     public function index_get(){
         try{
             $channels = $this->channels_model->get();
-            if(!is_null($channels))
-                $this->response( array('data' => $channels) , REST_Controller::HTTP_OK);
-            else
-                $this->response( array('error' => 'No se han encontrado canales') , REST_Controller::HTTP_NO_CONTENT);
+            $this->response( array('data' => $channels) , REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_NOT_FOUND);
         }
         
     }
@@ -30,12 +36,9 @@ class Channels extends REST_Controller{
                 $this->response( array('error' => 'falta can_id') , REST_Controller::HTTP_BAD_REQUEST);               
             }
             $channel = $this->channels_model->get( $channel_id );
-            if(!is_null($channel))
-                $this->response( array('data' => $channel) , REST_Controller::HTTP_OK);
-            else
-                $this->response( array('error' => 'No se ha encontrado el canal '.$channel_id) , REST_Controller::HTTP_NOT_FOUND);
+            $this->response( array('data' => $channel) , REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_NOT_FOUND);
         }
         
     }
@@ -46,12 +49,9 @@ class Channels extends REST_Controller{
                 $this->response( array('error' => 'falta cli_id') , REST_Controller::HTTP_BAD_REQUEST);               
             }
             $channels = $this->channels_model->getByCliId( $cli_id );
-            if(!is_null($channels))
-                $this->response( array('data' => $channels) , REST_Controller::HTTP_OK);
-            else
-                $this->response( array('error' => 'Aun no tienes canales') , REST_Controller::HTTP_NOT_FOUND);
+            $this->response( array('data' => $channels) , REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_NOT_FOUND);
         }
         
     }
@@ -67,12 +67,9 @@ class Channels extends REST_Controller{
         
         try{
             $channels = $this->channels_model->getChannelsBetweenMonths( $first_date, $second_date );
-            if(!is_null($channels))
-                $this->response( array('data' => $channels) , REST_Controller::HTTP_OK);
-            else
-                $this->response( array('error' => 'No existen canales en esta fecha') , REST_Controller::HTTP_NOT_FOUND);
+            $this->response( array('data' => $channels) , REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);    
+            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_NOT_FOUND);    
         }
     }
 
@@ -126,7 +123,7 @@ class Channels extends REST_Controller{
             'can_cli_ts_id' => null,
             'can_nombre'  => $this->post('can_nombre'),
             'can_contrasena' => $this->post('can_contrasena'),
-            'can_creacion' => date('Y-m-d G:i:s'),
+            'can_creacion' => date('Y-m-d H:i:s'),
             'can_permisos' => null
         );
 
@@ -145,10 +142,8 @@ class Channels extends REST_Controller{
             $clientInfo = $this->teamspeak->getConnectedClientInfo();
             $channel['can_id'] = $can_id;
             $channel['can_cli_ts_id'] = $clientInfo['cli_ts_id'];
-            if( $this->channels_model->createChannel($channel) ){
-                $this->response( array('data' => $channel) , REST_Controller::HTTP_OK );
-            }
-            $this->response( array('error' => 'No se pudo crear el canal') , REST_Controller::HTTP_BAD_REQUEST );
+            $this->channels_model->createChannel($channel);
+            $this->response( array('data' => $channel) , REST_Controller::HTTP_OK );
         }catch(Exception $e){
             $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
