@@ -68,7 +68,7 @@ class Login extends REST_Controller{
             $this->login_model->updatePassword( $client );
             $this->response( array('status' => 'OK', 'data' => 'Contraseña actualizada con éxito') , REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            $this->response( array('status' => 'ERROR', 'error' => $e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
 
@@ -111,7 +111,7 @@ class Login extends REST_Controller{
             $this->login_model->registerClient( $client, $login );
             $this->response( array('status' => 'OK', 'data' => 'Registro completado con éxito') , REST_Controller::HTTP_OK );
         }catch(Exception $e){
-            $this->response( array('status' => 'ERROR', 'error' => $e->getMessage()) , REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            $this->response( array('status' => 'ERROR', 'error' => $e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
 
