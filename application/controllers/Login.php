@@ -14,9 +14,9 @@ class Login extends REST_Controller{
         parent::__construct();
         $this->connection_client_ip = $_SERVER['REMOTE_ADDR'];
         $this->load->model('login_model');
-        $this->load->library('teamspeak');   
         $this->load->library('authorizationtoken');
         $this->load->library('encryption');
+        $this->load->library('reply');
         $this->encryption->initialize( array(
             'driver' => 'openssl',
             'cipher' => 'aes-256',
@@ -32,10 +32,10 @@ class Login extends REST_Controller{
             'log_conexion_ip' => $this->connection_client_ip
         );
         if( $client['log_correo'] == null){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta log_correo'), REST_Controller::HTTP_OK );
+            $this->response( $this->reply->error('falta log_correo'), REST_Controller::HTTP_OK );
 
-        }else if( $this->post('log_contrasena') == null){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta log_contrasena') , REST_Controller::HTTP_OK );
+        }else if( $client['log_contrasena'] == null){
+            $this->response( $this->reply->error('falta log_contrasena') , REST_Controller::HTTP_OK );
         
         }
         try{
@@ -45,9 +45,9 @@ class Login extends REST_Controller{
             $tokenpayload['email'] = $client->log_correo; 
             $tokenpayload['time'] = time();
             $token = $this->authorizationtoken->generateToken( $tokenpayload );
-            $this->response( array('status' => 'OK', 'data' => $token ), REST_Controller::HTTP_OK);
+            $this->response( $this->reply->ok( $token ), REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('status' => 'ERROR', 'error' => $e->getMessage()), REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error( $e->getMessage() ), REST_Controller::HTTP_OK);
         }
     }
 
@@ -57,18 +57,19 @@ class Login extends REST_Controller{
             'log_cli_id' => $this->put('log_cli_id'),
             'log_contrasena' => $this->encryption->encrypt($this->put('log_contrasena'))
         );
-        if( $this->post('log_cli_id') ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta log_cli_id') , REST_Controller::HTTP_OK);
+        if( $client['log_cli_id'] == null ){
+            $this->response( $this->reply->error('falta log_cli_id') , REST_Controller::HTTP_OK);
         
-        }else if( $this->post('log_contrasena') ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta log_contrasena'), REST_Controller::HTTP_OK);
+        }else if( $client['log_contrasena'] == null ){
+            $this->response( $this->reply->error('falta log_contrasena'), REST_Controller::HTTP_OK);
         }
         
         try{
             $this->login_model->updatePassword( $client );
-            $this->response( array('status' => 'OK', 'data' => 'Contraseña actualizada con éxito') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->ok('Contraseña actualizada con éxito') , REST_Controller::HTTP_OK);
         }catch(Exception $e){
-            $this->response( array('status' => 'ERROR', 'error' => $e->getMessage()) , REST_Controller::HTTP_OK);
+            log_message('error', $e->getMessage());
+            $this->response( $this->reply->fatal($e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
 
@@ -79,8 +80,7 @@ class Login extends REST_Controller{
             'cli_alias'  => $this->post('cli_alias'),
             'cli_pais' => $this->post('cli_pais'),
             'cli_ciudad' => $this->post('cli_ciudad'),
-            'cli_nacimiento' => $this->post('cli_nacimiento'),
-            'cli_creacion' => date('Y-m-d H:i:s')
+            'cli_nacimiento' => $this->post('cli_nacimiento')
         );
         $login = array(
             'log_correo' => $this->post('log_correo'),
@@ -89,29 +89,30 @@ class Login extends REST_Controller{
         );
 
         if( $client['cli_nombre'] == null ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta cli_nombre') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error('falta cli_nombre') , REST_Controller::HTTP_OK);
         
         }else if( $client['cli_pais'] == null ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta cli_pais') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error('falta cli_pais') , REST_Controller::HTTP_OK);
         
         }else if( $client['cli_ciudad'] == null ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta cli_ciudad') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error('falta cli_ciudad') , REST_Controller::HTTP_OK);
         
         }else if( $client['cli_nacimiento'] == null ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta cli_nacimiento') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error('falta cli_nacimiento') , REST_Controller::HTTP_OK);
         
         }else if( $login['log_correo'] == null ){
-            $this->response( array('status' => 'ERROR', 'error' => 'falta log_correo') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error('falta log_correo') , REST_Controller::HTTP_OK);
         
         }else if( $this->post('log_contrasena') == null ){
-            $this->response( array('status' => 'ERROR','error' => 'falta log_contrasena') , REST_Controller::HTTP_OK);
+            $this->response( $this->reply->error('falta log_contrasena') , REST_Controller::HTTP_OK);
         }
 
         try{
             $this->login_model->registerClient( $client, $login );
-            $this->response( array('status' => 'OK', 'data' => 'Registro completado con éxito') , REST_Controller::HTTP_OK );
+            $this->response( $this->reply->ok('Registro completado con éxito') , REST_Controller::HTTP_OK );
         }catch(Exception $e){
-            $this->response( array('status' => 'ERROR', 'error' => $e->getMessage()) , REST_Controller::HTTP_OK);
+            log_message('error', $e->getMessage());
+            $this->response( $this->reply->fatal($e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
 

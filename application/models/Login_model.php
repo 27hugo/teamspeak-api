@@ -18,7 +18,7 @@ class Login_model extends CI_Model{
             $this->db->where('log_cli_id', $result->row()->log_cli_id);
             $this->db->update('login');
             if( $this->db->affected_rows() === 0 ){
-                throw new Exception('No se ha podido recuperar los datos de conexión');
+                throw new Exception('No se han podido recuperar los datos de conexión');
             }
             return $result->row();
         }
@@ -27,7 +27,8 @@ class Login_model extends CI_Model{
     
     public function registerClient( $client, $login ){
         $this->db->trans_start();
-
+        
+        $client['cli_creacion'] = date('Y-m-d H:i:s');
         $this->db->insert('clientes', $client );
         $cli_id = $this->db->insert_id();
 
@@ -37,10 +38,11 @@ class Login_model extends CI_Model{
 
         $login['log_cli_id'] = $cli_id;
         $this->db->insert('login', $login);
-    
-        if($this->db->trans_complete())
+        
+        $this->db->trans_complete();
+        if($this->db->affected_rows() > 0)
             return true;
-        throw new Exception('Ocrrió un error al registrar cliente');
+        throw new Exception('Ocurrió un error al registrar cliente');
     }
 
     public function updatePassword( $client ){
@@ -48,7 +50,7 @@ class Login_model extends CI_Model{
         $this->db->where('log_cli_id', $client['log_cli_id']);
         $this->db->update('login');
         if( $this->db->affected_rows() != 1)
-            throw new Exception('Ocurrió un error al actualizar la contraseña'); 
+            throw new Exception('Ocurrió un error al actualizar la contraseña del cliente ID '.$client['log_cli_id']); 
     }
 
 }

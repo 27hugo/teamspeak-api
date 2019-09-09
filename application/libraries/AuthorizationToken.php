@@ -19,13 +19,14 @@ class AuthorizationToken {
      * ( 1 Day ) : 60 * 60 * 24 = 86400
      * ( 1 Hour ) : 60 * 60     = 3600
      */
-    protected $token_expire_time = 3600; 
+    protected $token_expire_time; 
 
     public function __construct(){
         $this->CI =& get_instance();
         $this->CI->load->config('jwt');
         $this->token_key        = $this->CI->config->item('jwt_key');
         $this->token_algorithm  = $this->CI->config->item('jwt_algorithm');
+        $this->token_expire_time = $this->CI->config->item('jwt_expire_time');
     }
 
     public function generateToken($data){

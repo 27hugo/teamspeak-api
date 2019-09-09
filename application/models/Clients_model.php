@@ -5,6 +5,7 @@ class Clients_model extends CI_Model{
     
     public function __construct(){
         parent::__construct();
+        date_default_timezone_set('America/Santiago');
     }
     
     public function get($client_id = null){
@@ -23,26 +24,6 @@ class Clients_model extends CI_Model{
         throw new Exception('No hay clientes registrados');
     }
     
-    public function registerClient( $client, $login ){
-        $this->db->trans_start();
-
-        $this->db->insert('clientes', $client );
-        $cli_id = $this->db->insert_id();
-        echo $cli_id;
-
-        $this->db->set('cli_uid', md5($cli_id));
-        $this->db->where('cli_id', $cli_id);
-        $this->db->update('clientes');
-
-        $login['log_cli_id'] = $cli_id;
-        $this->db->insert('login', $login);
-        
-        $this->db->trans_complete();
-        if($this->db->affected_rows() > 0)
-            return true;
-        throw new Exception('Ocrrio un error al registrar cliente');
-    }
-
     public function updateClient( $client ){  
         $this->db->set('cli_nombre', $client['cli_nombre'] );
         $this->db->set('cli_alias', $client['cli_alias'] );
@@ -54,7 +35,7 @@ class Clients_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            throw new Exception('Ocurrió un error al actualizar cliente');
+            throw new Exception('Ocurrió un error al actualizar cliente ID '.$client['cli_id']);
     }
 
     
@@ -64,6 +45,6 @@ class Clients_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            throw new Exception('Ocurrió un error al eliminar cliente');
+            throw new Exception('Ocurrió un error al eliminar cliente ID '.$client['cli_id']);
     }
 }
