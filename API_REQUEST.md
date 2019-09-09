@@ -8,7 +8,7 @@ la aplicación en caso de fallos.
 #### 1 Canales
 
 ##### 1.1 Consulta de canales creados.
-GET => http://localhost/api/index.php/channels/
+GET => http://localhost/api/index.php/channels
 
 ##### 1.2 Consulta de canal por id.
 GET => http://localhost/api/index.php/channels/find/:channel_id
@@ -17,7 +17,7 @@ GET => http://localhost/api/index.php/channels/find/:channel_id
 GET => http://localhost/api/index.php/channels/findbycliid/:client_id
 
 ##### 1.4 Consulta de canales entre dos fechas.
-POST => http://localhost/api/index.php/channels/findbetween/
+POST => http://localhost/api/index.php/channels/findbetween
 ```
 {
     "first_date":"2019-01-01",
@@ -53,15 +53,15 @@ POST => http://localhost/api/index.php/channels/create
 }
 ```
 ##### 1.8 Eliminar canal.
-DELETE => http://localhost/api/index.php/channels/delete
+DELETE => http://localhost/api/index.php/channels/delete/:channel_id
 
 #### 2 Clientes
 
 ##### 2.1 Consulta de clientes registrados.
-GET => http://localhost/api/index.php/clients/
+GET => http://localhost/api/index.php/clients
 
 ##### 2.2 Consulta de clientes en linea.
-GET => http://localhost/api/index.php/clients/online/
+GET => http://localhost/api/index.php/clients/online
 
 ##### 2.3 Consulta de cliente por id.
 GET => http://localhost/api/index.php/clients/find/:client_id
@@ -77,13 +77,13 @@ PUT => http://localhost/api/index.php/clients/update
     "cli_nacimiento":"1994-04-01"
 }
 ```
-##### 2.5 Eliminar clientes.
+##### 2.5 Eliminar cliente.
 DELETE => http://localhost/api/index.php/clients/delete/:client_id
 
 #### 3 Login
 
 ##### 3.1 Iniciar sesion con cuenta existente.
-POST => http://localhost/api/index.php/login/
+POST => http://localhost/api/index.php/login
 ```
 {
     "log_correo":"ejemplo@ejemplo.com",
