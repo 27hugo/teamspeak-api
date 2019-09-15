@@ -72,8 +72,8 @@ PUT => http://localhost/api/index.php/clients/update
 {
     "cli_id":"1",
     "cli_nombre":"Juan",
-    "cli_pais":"Chile",
-    "cli_ciudad":"Santiago",
+    "cli_region":"Valparaíso",
+    "cli_ciudad":"Valparaíso",
     "cli_nacimiento":"1994-04-01"
 }
 ```
@@ -99,8 +99,8 @@ POST => http://localhost/api/index.php/login/register
     "log_contrasena":"123456",
     "cli_nombre":"Juan",
     "cli_alias":"JuanAlias",
-    "cli_pais":"Chile",
-    "cli_ciudad":"Santiago",
+    "cli_region":"Valparaíso",
+    "cli_ciudad":"Viña del Mar",
     "cli_nacimiento":"1994-04-01"
 }
 ```
