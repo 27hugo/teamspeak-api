@@ -58,7 +58,7 @@ class Clients extends REST_Controller{
             'cli_id' => $this->put('cli_id'),
             'cli_nombre' => $this->put('cli_nombre'),
             'cli_alias' => $this->put('cli_alias'),
-            'cli_pais' => $this->put('cli_pais'),
+            'cli_region' => $this->put('cli_region'),
             'cli_ciudad' => $this->put('cli_ciudad'),
             'cli_nacimiento' => $this->put('cli_nacimiento')    
         );
@@ -69,8 +69,8 @@ class Clients extends REST_Controller{
         }else if( $client['cli_nombre'] == null ){
             $this->response( $this->reply->error('falta cli_nombre') , REST_Controller::HTTP_OK);
         
-        }else if( $client['cli_pais'] == null ){
-            $this->response( $this->reply->error('falta cli_pais') , REST_Controller::HTTP_OK);
+        }else if( $client['cli_region'] == null ){
+            $this->response( $this->reply->error('falta cli_region') , REST_Controller::HTTP_OK);
         
         }else if( $client['cli_ciudad'] == null ){
             $this->response( $this->reply->error('falta cli_ciudad') , REST_Controller::HTTP_OK);

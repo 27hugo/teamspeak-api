@@ -78,7 +78,7 @@ class Login extends REST_Controller{
         $client = array(
             'cli_nombre' => $this->post('cli_nombre'),
             'cli_alias'  => $this->post('cli_alias'),
-            'cli_pais' => $this->post('cli_pais'),
+            'cli_region' => $this->post('cli_region'),
             'cli_ciudad' => $this->post('cli_ciudad'),
             'cli_nacimiento' => $this->post('cli_nacimiento')
         );
@@ -91,8 +91,8 @@ class Login extends REST_Controller{
         if( $client['cli_nombre'] == null ){
             $this->response( $this->reply->error('falta cli_nombre') , REST_Controller::HTTP_OK);
         
-        }else if( $client['cli_pais'] == null ){
-            $this->response( $this->reply->error('falta cli_pais') , REST_Controller::HTTP_OK);
+        }else if( $client['cli_region'] == null ){
+            $this->response( $this->reply->error('falta cli_region') , REST_Controller::HTTP_OK);
         
         }else if( $client['cli_ciudad'] == null ){
             $this->response( $this->reply->error('falta cli_ciudad') , REST_Controller::HTTP_OK);

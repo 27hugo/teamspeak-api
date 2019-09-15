@@ -61,8 +61,9 @@ class Login_model extends CI_Model{
         $this->db->insert('login', $login);
         
         $this->db->trans_complete();
-        if($this->db->affected_rows() > 0)
+        if( $this->db->trans_status() ){
             return true;
+        }
         throw new Exception('Ocurrió un error al registrar cliente');
     }
     /*
