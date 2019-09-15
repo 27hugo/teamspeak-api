@@ -45,7 +45,7 @@ TYPE: POST
 DATA:
     {
         "log_correo":"email@example.com",
-        "log_contrasena":"123456"
+        "log_contrasena":"12345678"
     }
 ```
 #### Crear nuevo canal.
