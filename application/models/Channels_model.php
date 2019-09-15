@@ -19,11 +19,8 @@ class Channels_model extends CI_Model{
         }
     
         $result = $this->db->get('canales');
-        if ($result->num_rows() > 0) {
-            return $result->result_object();
-        }else{
-            throw new Exception('No se han creado canales aun');
-        }
+        return $result->result_object();
+        
     }
     
     public function createChannel( $channel ){
@@ -38,22 +35,14 @@ class Channels_model extends CI_Model{
 
     public function getByCliId($cli_id){
         $result = $this->db->where('can_cli_id', $cli_id)->get('canales');
-        if ($result->num_rows() > 0) {
-            return $result->result_object();
-        }else{
-            throw new Exception('El cliente no registra ningun canal');
-        }
+        return $result->result_object();
     }
 
     public function getChannelsBetweenMonths( $first_date, $second_date ){
         $this->db->where('can_creacion >=', $first_date);
         $this->db->where('can_creacion <=', $second_date);
         $result = $this->db->get('canales');
-        if ($result->num_rows() > 0) {
-            return $result->result_object();
-        }else{
-            throw new Exception('No existen canales en las fechas indicadas');    
-        }
+        return $result->result_object();
     }
 
     public function updateChannelName( $channel ){  

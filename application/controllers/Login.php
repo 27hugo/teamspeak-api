@@ -41,7 +41,7 @@ class Login extends REST_Controller{
         try{
             $client = $this->login_model->validateClient( $client );
             
-            $tokenpayload['id'] = md5($client->log_cli_id);
+            $tokenpayload['id'] = $client->log_cli_id;
             $tokenpayload['email'] = $client->log_correo; 
             $tokenpayload['time'] = time();
             $token = $this->authorizationtoken->generateToken( $tokenpayload );

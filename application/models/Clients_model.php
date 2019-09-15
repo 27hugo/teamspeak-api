@@ -18,10 +18,7 @@ class Clients_model extends CI_Model{
         }
     
         $result = $this->db->get('clientes');
-        if ($result->num_rows() > 0) {
-            return $result->result_object();
-        }
-        throw new Exception('No hay clientes registrados');
+        return $result->result_object();
     }
     
     public function updateClient( $client ){  
