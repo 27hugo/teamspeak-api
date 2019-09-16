@@ -88,7 +88,7 @@ class Teamspeak{
                 $client['cli_ts_ip'] =  $connection_client_ip;
             }
         }
-        var_dump($client);
+        //var_dump($client);
         return $client;
     }
 }

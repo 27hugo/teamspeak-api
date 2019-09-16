@@ -45,6 +45,13 @@ class Login_model extends CI_Model{
     | como array, y también los datos de login como array
     */
     public function registerClient( $client, $login ){
+        $this->db->where('log_correo', $login['log_correo']);
+        $result = $this->db->get('login');
+        /* Comprobar si el usuario ingresado existe */
+        if( $result->num_rows() === 1 ){
+            throw new Exception('El correo ya se encuentra registrado');
+        }
+
         $this->db->trans_start();
         
         $client['cli_creacion'] = date('Y-m-d H:i:s');
