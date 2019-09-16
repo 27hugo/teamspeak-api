@@ -30,6 +30,7 @@ class Clients extends REST_Controller{
     }
 
     public function online_get(){
+        //cumple con todos lo necesario para ver los clientes en linea
         try{
             $this->load->library('teamspeak');   
             $clients = $this->teamspeak->getClients();
@@ -40,6 +41,7 @@ class Clients extends REST_Controller{
     }
 
     public function find_get( $client_id ){
+        //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
         try{
             if(is_null($client_id)){
                 $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);               
@@ -54,6 +56,7 @@ class Clients extends REST_Controller{
     }
 
     public function update_put(){
+        //cumple con todos lo necesario para cambiar los datos del cliente segun su "cli_id"
         $client = array(
             'cli_id' => $this->put('cli_id'),
             'cli_nombre' => $this->put('cli_nombre'),
@@ -89,6 +92,7 @@ class Clients extends REST_Controller{
     }
 
     public function delete_delete( $client_id ){
+        //cumple con todos lo necesario para borrar un cliente segun su "cli_id"
         try{
             $this->clients_model->deleteClient( $client_id );
             $this->response( $this->reply->ok('El cliente ha sido eliminado') , REST_Controller::HTTP_OK);    

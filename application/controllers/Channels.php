@@ -29,6 +29,7 @@ class Channels extends REST_Controller{
         
     }
     public function find_get( $channel_id ){
+        //cumple con todos lo necesario para buscar un canal por "channel_id"
         try{
             if(is_null($channel_id)){
                 $this->response( $this->reply->error('falta can_id') , REST_Controller::HTTP_OK);               
@@ -42,6 +43,7 @@ class Channels extends REST_Controller{
     }
 
     public function findByCliId_get( $cli_id ){
+        //cumple con todos lo necesario para buscar los canales creados por el cliente con su "cli_id"
         try{
             if(is_null($cli_id)){
                 $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);               
@@ -55,6 +57,7 @@ class Channels extends REST_Controller{
     }
 
     public function findBetween_post(){
+         //cumple con todos lo necesario para buscar los canales creados entre las fechas ingresadas
         
         $first_date = $this->post('first_date');
         $second_date = $this->post('second_date');
@@ -74,6 +77,7 @@ class Channels extends REST_Controller{
     }
 
     public function updateChannelName_put(){
+         //cumple con todos lo necesario para cambiar el nombre del canal segun su "can_id"
         $channel = array(
             'can_id' => $this->put('can_id'),
             'can_nombre' => $this->put('can_nombre')
@@ -98,6 +102,7 @@ class Channels extends REST_Controller{
     }
 
     public function updateChannelPassword_put(){
+        //cumple con todos lo necesario para cambiar la contraseña del canal segun su "can_id"
         $channel = array(
             'can_id' => $this->put('can_id'),
             'can_contrasena' => $this->put('can_contrasena')
@@ -121,6 +126,7 @@ class Channels extends REST_Controller{
     }
 
     public function create_post(){
+        //cumple con todos lo necesario para crear un canal
         $channel = array(
             'can_id' => null,
             'can_cli_id' => $this->post('can_cli_id'),
@@ -155,6 +161,7 @@ class Channels extends REST_Controller{
     }
 
     public function delete_delete( $channel_id = null ){
+        //cumple con todos lo necesario para borrar un canal por su "$channel_id"
         if( $channel_id == null){
             $this->response( $this->reply->error('falta can_id'), REST_Controller::HTTP_OK);
 

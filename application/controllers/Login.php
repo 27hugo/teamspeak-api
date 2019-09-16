@@ -52,17 +52,20 @@ class Login extends REST_Controller{
     }
 
     public function changePassword_put(){
-        
-        $client = array(
-            'log_cli_id' => $this->put('log_cli_id'),
-            'log_contrasena' => $this->encryption->encrypt($this->put('log_contrasena'))
-        );
-        if( $client['log_cli_id'] == null ){
+        //cumple con todos lo necesario para cambiar la contraseña
+
+        if( $this->put('log_cli_id') == null ){
             $this->response( $this->reply->error('falta log_cli_id') , REST_Controller::HTTP_OK);
         
-        }else if( $client['log_contrasena'] == null ){
+        }else if( $this->put('log_contrasena') == null ){
             $this->response( $this->reply->error('falta log_contrasena'), REST_Controller::HTTP_OK);
         }
+        
+        $client = array(
+            'log_cli_id' =>$this->put('log_cli_id'),
+            'log_contrasena' => $this->encryption->encrypt($this->put('log_contrasena'))
+        );
+       
         
         try{
             $this->login_model->updatePassword( $client );
@@ -74,6 +77,8 @@ class Login extends REST_Controller{
     }
 
     public function register_post(){
+
+        //cumple con todos lo necesario para registrarse con los datos necesarios
 
         $client = array(
             'cli_nombre' => $this->post('cli_nombre'),
