@@ -153,7 +153,7 @@ class Channels extends REST_Controller{
             $channel['can_id'] = $can_id;
             $channel['can_cli_ts_id'] = $clientInfo['cli_ts_id'];
             $this->channels_model->createChannel($channel);
-            $this->response( $this->reply->ok($channel) , REST_Controller::HTTP_OK );
+            $this->response( $this->reply->ok('El canal ha sido creado') , REST_Controller::HTTP_OK );
         }catch(Exception $e){
             log_message('error', $e->getMessage());
             $this->response( $this->reply->fatal($e->getMessage()) , REST_Controller::HTTP_OK);
