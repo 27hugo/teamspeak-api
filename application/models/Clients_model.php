@@ -24,7 +24,7 @@ class Clients_model extends CI_Model{
     public function updateClient( $client ){  
         $this->db->set('cli_nombre', $client['cli_nombre'] );
         $this->db->set('cli_alias', $client['cli_alias'] );
-        $this->db->set('cli_pais', $client['cli_pais'] );
+        $this->db->set('cli_region', $client['cli_region'] );
         $this->db->set('cli_ciudad', $client['cli_ciudad'] );
         $this->db->set('cli_nacimiento', $client['cli_nacimiento'] ); 
         $this->db->where('cli_id', $client['cli_id']);
