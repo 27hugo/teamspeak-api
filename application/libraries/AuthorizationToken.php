@@ -57,12 +57,12 @@ class AuthorizationToken {
                         return ['status' => FALSE, 'message' => 'No se definió el id del token.'];
 
                     // Check Token Time
-                    }else if(empty($token_decode->time OR !is_numeric($token_decode->time))) {
+                    }else if(empty($token_decode->iat OR !is_numeric($token_decode->iat))) {
                         return ['status' => FALSE, 'message' => 'No se definió la hora del token.'];
                     
                     }else{
                         // Check Token Time Valid 
-                        $time_difference = strtotime('now') - $token_decode->time;
+                        $time_difference = strtotime('now') - $token_decode->iat;
                         if( $time_difference >= $this->token_expire_time ){
                             return ['status' => FALSE, 'message' => 'El token ha expirado.'];
 

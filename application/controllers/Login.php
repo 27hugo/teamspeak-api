@@ -40,10 +40,13 @@ class Login extends REST_Controller{
         }
         try{
             $client = $this->login_model->validateClient( $client );
-            
+            $this->CI =& get_instance();
+            $this->CI->load->config('jwt');
+            $this->token_expire_time = $this->CI->config->item('jwt_expire_time');
             $tokenpayload['id'] = $client->log_cli_id;
             $tokenpayload['email'] = $client->log_correo; 
-            $tokenpayload['time'] = time();
+            $tokenpayload['exp'] = time() + $this->token_expire_time;
+            $tokenpayload['iat'] = time();
             $token = $this->authorizationtoken->generateToken( $tokenpayload );
             $this->response( $this->reply->ok( $token ), REST_Controller::HTTP_OK);
         }catch(Exception $e){
