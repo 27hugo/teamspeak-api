@@ -14,6 +14,7 @@ class Login extends REST_Controller{
         parent::__construct();
         $this->connection_client_ip = $_SERVER['REMOTE_ADDR'];
         $this->load->model('login_model');
+        $this->load->model('clients_model');
         $this->load->library('authorizationtoken');
         $this->load->library('encryption');
         $this->load->library('reply');
@@ -44,7 +45,10 @@ class Login extends REST_Controller{
             $this->CI->load->config('jwt');
             $this->token_expire_time = $this->CI->config->item('jwt_expire_time');
             $tokenpayload['id'] = $client->log_cli_id;
+            $tokenpayload['nombre'] = $this->clients_model->get($client->log_cli_id)->cli_nombre;
+            $tokenpayload['alias'] = $this->clients_model->get($client->log_cli_id)->cli_alias;
             $tokenpayload['email'] = $client->log_correo; 
+            $tokenpayload['tipo'] = $client->log_tipo;
             $tokenpayload['exp'] = time() + $this->token_expire_time;
             $tokenpayload['iat'] = time();
             $token = $this->authorizationtoken->generateToken( $tokenpayload );
@@ -93,7 +97,8 @@ class Login extends REST_Controller{
         $login = array(
             'log_correo' => $this->post('log_correo'),
             'log_contrasena' => $this->encryption->encrypt($this->post('log_contrasena')),
-            'log_conexion_ip' => $this->connection_client_ip
+            'log_conexion_ip' => $this->connection_client_ip,
+            'log_tipo' => 'user'
         );
 
         if( $client['cli_nombre'] == null ){
