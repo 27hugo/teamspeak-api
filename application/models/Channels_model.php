@@ -38,11 +38,14 @@ class Channels_model extends CI_Model{
         return $result->result_object();
     }
 
-    public function getChannelsBetweenMonths( $first_date, $second_date ){
-        $this->db->where('can_creacion >=', $first_date);
-        $this->db->where('can_creacion <=', $second_date);
+    public function getChannelsBetweenMonths( $year, $month ){
+        $this->db->select('count(can_id) as total_canales' );
+        $this->db->where('year(can_creacion)', date($year));
+        $this->db->where('month(can_creacion)', date($month));
+        
         $result = $this->db->get('canales');
-        return $result->result_object();
+        return $result->row()->total_canales;
+
     }
 
     public function updateChannelName( $channel ){  
@@ -76,4 +79,21 @@ class Channels_model extends CI_Model{
             throw new Exception('Ocurrió un error al eliminar el canal ID '.$channel['can_id']);
         }
     }
+     public function totalChannels(){
+        $this->db->select('count(can_id) as total_canales');
+        $this->db->from('canales');
+        $channel = $this->db->get();
+        return $channel->row()->total_canales;
+    }
+   
+     public function  getTotalChannelsPerClient($cli_id){
+        $this->db->select('count(can_id) as total_canales');
+        $this->db->where('can_cli_id', $cli_id);
+        $this->db->from('canales');
+        $channel = $this->db->get();
+        return $channel->row()->total_canales;
+    }
+
+  
+
 }
