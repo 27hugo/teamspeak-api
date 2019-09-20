@@ -39,6 +39,17 @@ class Clients extends REST_Controller{
             $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
+     public function countOnline_get(){
+        //cumple con todos lo necesario para ver los clientes en linea
+        try{
+            $this->load->library('teamspeak');   
+            $clients = $this->teamspeak->getClients();
+
+            $this->response( $this->reply->ok(count($clients)-1) , REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+    }
 
     public function find_get( $client_id ){
         //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
