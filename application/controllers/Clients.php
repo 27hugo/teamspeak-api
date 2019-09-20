@@ -115,7 +115,7 @@ class Clients extends REST_Controller{
         }
         
     }
-    public function connectionbetween_post(){
+    public function connectionBetween_post(){
         //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
           $client = array(
             'cli_id' => $this->post('cli_id'),
@@ -141,7 +141,7 @@ class Clients extends REST_Controller{
         }   
     }
 
-    public function connectionpermonth_get($year, $month){ 
+    public function connectionsPerMonth_get($year, $month){ 
           //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
         try{	
          	 if(is_null($year)){
@@ -150,7 +150,7 @@ class Clients extends REST_Controller{
             if(is_null($month)){
                 $this->response( $this->reply->error('falta mes') , REST_Controller::HTTP_OK);               
             }
-            $result = $this->clients_model->connectionpermonth( $year, $month);
+            $result = $this->clients_model->connectionsPerMonth( $year, $month);
             $this->response( $this->reply->ok($result) , REST_Controller::HTTP_OK);
 
         }catch(Exception $e){
@@ -159,10 +159,10 @@ class Clients extends REST_Controller{
         }
         
     }
-    public function total_clients_get(){
+    public function totalClients_get(){
 
     	  try{          
-            $client = $this->clients_model->total_clients();
+            $client = $this->clients_model->totalClients();
             $this->response( $this->reply->ok($client) , REST_Controller::HTTP_OK);
         }catch(Exception $e){
             $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
