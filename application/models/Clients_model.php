@@ -44,4 +44,42 @@ class Clients_model extends CI_Model{
         else
             throw new Exception('Ocurrió un error al eliminar cliente ID '.$client['cli_id']);
     }
+    public function lastConnections($client_id){
+        $this->db->where('his_log_cli_id', $client_id);
+        $this->db->order_by('his_log_ultima_conexion', 'DESC');
+        $this->db->limit(5);
+
+        $result = $this->db->get('historial_login');
+        return $result->result_object();
+    }
+    public function connectionsBetween($client){
+        $this->db->where('his_log_cli_id', $client['cli_id']);
+        $this->db->where('his_log_ultima_conexion >=', $client['first_date']);
+		$this->db->where('his_log_ultima_conexion <=', $client['second_date']);
+        $this->db->order_by('his_log_ultima_conexion', 'DESC');
+        $this->db->limit(5);
+
+        $result = $this->db->get('historial_login');
+        return $result->result_object();
+    }
+     public function connectionsPerMonth($year, $month ){
+     	$this->db->select('count(his_id) as total_conexiones' );
+	    $this->db->where('year(his_log_ultima_conexion)', date($year));
+	   	$this->db->where('month(his_log_ultima_conexion)', date($month));
+	    $result = $this->db->get('historial_login');
+	    return $result->row()->total_conexiones;
+    }
+    public function totalClients(){
+    	$this->db->select('count(cli_id) as total_clientes');
+    	$this->db->from('clientes');
+	    $result = $this->db->get();
+	    return $result->row()->total_clientes;
+    }
+
+    
 }
+
+
+
+
+

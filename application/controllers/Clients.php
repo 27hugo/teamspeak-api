@@ -101,4 +101,75 @@ class Clients extends REST_Controller{
             $this->response( $this->reply->fatal($e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
+     public function lastConnections_get( $client_id =null ){
+        //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
+         try{
+            if(is_null($client_id)){
+                $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);               
+            }
+            
+            $client = $this->clients_model->lastConnections( $client_id );
+            $this->response( $this->reply->ok($client) , REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+        
+    }
+    public function connectionsBetween_post(){
+        //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
+          $client = array(
+            'cli_id' => $this->post('cli_id'),
+            'first_date' => $this->post('first_date'),
+            'second_date' => $this->post('second_date')  
+        );
+          if( $client['cli_id'] == null ){
+            $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);
+        
+        }else if( $client['first_date'] == null ){
+            $this->response( $this->reply->error('falta first_date') , REST_Controller::HTTP_OK);
+        
+        }else if( $client['second_date'] == null ){
+            $this->response( $this->reply->error('falta second_date') , REST_Controller::HTTP_OK);
+        
+        }
+         try{
+            $result = $this->clients_model->connectionsBetween( $client );
+            $this->response( $this->reply->ok($result), REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            log_message('error', $e->getMessage());
+            $this->response( $this->reply->fatal($e->getMessage()), REST_Controller::HTTP_OK);
+        }   
+    }
+
+    public function connectionsPerMonth_get($year, $month){ 
+          //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
+        try{	
+         	 if(is_null($year)){
+                $this->response( $this->reply->error('falta año') , REST_Controller::HTTP_OK);               
+            }
+            if(is_null($month)){
+                $this->response( $this->reply->error('falta mes') , REST_Controller::HTTP_OK);               
+            }
+            $result = $this->clients_model->connectionsPerMonth( $year, $month);
+            $this->response( $this->reply->ok($result) , REST_Controller::HTTP_OK);
+
+        }catch(Exception $e){
+
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+        
+    }
+    public function totalClients_get(){
+
+    	  try{          
+            $client = $this->clients_model->totalClients();
+            $this->response( $this->reply->ok($client) , REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+
+    }
+    
+        
+    
 }
