@@ -56,24 +56,44 @@ class Channels extends REST_Controller{
         
     }
 
-    public function findBetween_post(){
+
+
+    public function channelsPerMonth_get($year, $month){
          //cumple con todos lo necesario para buscar los canales creados entre las fechas ingresadas
-        
-        $first_date = $this->post('first_date');
-        $second_date = $this->post('second_date');
-        if( $first_date == null){
-            $this->response( $this->reply->error('falta first_date') , REST_Controller::HTTP_OK);    
-        
-        }else if( $second_date == null){
-            $this->response( $this->reply->error('falta second_date') , REST_Controller::HTTP_OK);    
-        
-        }
-        try{
-            $channels = $this->channels_model->getChannelsBetweenMonths( $first_date, $second_date );
-            $this->response( $this->reply->ok($channels) , REST_Controller::HTTP_OK);
+         try{	
+         	 if(is_null($year)){
+                $this->response( $this->reply->error('falta año') , REST_Controller::HTTP_OK);               
+            }
+            if(is_null($month)){
+                $this->response( $this->reply->error('falta mes') , REST_Controller::HTTP_OK);               
+            }
+            $result = $this->channels_model->getChannelsBetweenMonths( $year, $month);
+            $this->response( $this->reply->ok($result) , REST_Controller::HTTP_OK);
+
         }catch(Exception $e){
-            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);    
+
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
         }
+        
+      
+    }
+
+    public function totalChannelsPerClient_get($cli_id){
+
+         try{	
+         	if(is_null($cli_id)){
+                $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);               
+            }
+         	 
+            $result = $this->channels_model->getTotalChannelsPerClient($cli_id);
+            $this->response( $this->reply->ok($result) , REST_Controller::HTTP_OK);
+
+        }catch(Exception $e){
+
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+        
+      
     }
 
     public function updateChannelName_put(){
@@ -175,5 +195,15 @@ class Channels extends REST_Controller{
             log_message('error', $e->getMessage());
             $this->response( $this->reply->fatal($e->getMessage()) , REST_Controller::HTTP_OK);
         }
+    }
+       public function totalChannels_get(){
+
+          try{          
+            $channel = $this->channels_model->totalChannels();
+            $this->response( $this->reply->ok($channel) , REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+
     }
 }
