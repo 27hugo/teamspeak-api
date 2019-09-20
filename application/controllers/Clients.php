@@ -115,6 +115,61 @@ class Clients extends REST_Controller{
         }
         
     }
+    public function connectionbetween_post(){
+        //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
+          $client = array(
+            'cli_id' => $this->post('cli_id'),
+            'first_date' => $this->post('first_date'),
+            'second_date' => $this->post('second_date')  
+        );
+          if( $client['cli_id'] == null ){
+            $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);
+        
+        }else if( $client['first_date'] == null ){
+            $this->response( $this->reply->error('falta first_date') , REST_Controller::HTTP_OK);
+        
+        }else if( $client['second_date'] == null ){
+            $this->response( $this->reply->error('falta second_date') , REST_Controller::HTTP_OK);
+        
+        }
+         try{
+            $result = $this->clients_model->connectionbetween( $client );
+            $this->response( $this->reply->ok($result), REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            log_message('error', $e->getMessage());
+            $this->response( $this->reply->fatal($e->getMessage()), REST_Controller::HTTP_OK);
+        }   
+    }
+
+    public function connectionpermonth_get($year, $month){ 
+          //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
+        try{	
+         	 if(is_null($year)){
+                $this->response( $this->reply->error('falta año') , REST_Controller::HTTP_OK);               
+            }
+            if(is_null($month)){
+                $this->response( $this->reply->error('falta mes') , REST_Controller::HTTP_OK);               
+            }
+            $result = $this->clients_model->connectionpermonth( $year, $month);
+            $this->response( $this->reply->ok($result) , REST_Controller::HTTP_OK);
+
+        }catch(Exception $e){
+
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+        
+    }
+    public function total_clients_get(){
+
+    	  try{          
+            $client = $this->clients_model->total_clients();
+            $this->response( $this->reply->ok($client) , REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+
+    }
+    
         
     
 }
