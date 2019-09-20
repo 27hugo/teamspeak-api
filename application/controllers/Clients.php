@@ -101,4 +101,20 @@ class Clients extends REST_Controller{
             $this->response( $this->reply->fatal($e->getMessage()) , REST_Controller::HTTP_OK);
         }
     }
+     public function connection_get( $client_id =null ){
+        //cumple con todos lo necesario para buscar los datos del cliente segun su "cli_id"
+         try{
+            if(is_null($client_id)){
+                $this->response( $this->reply->error('falta cli_id') , REST_Controller::HTTP_OK);               
+            }
+            
+            $client = $this->clients_model->connection_get( $client_id );
+            $this->response( $this->reply->ok($client) , REST_Controller::HTTP_OK);
+        }catch(Exception $e){
+            $this->response( $this->reply->error($e->getMessage()) , REST_Controller::HTTP_OK);
+        }
+        
+    }
+        
+    
 }

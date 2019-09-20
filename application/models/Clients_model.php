@@ -44,4 +44,12 @@ class Clients_model extends CI_Model{
         else
             throw new Exception('Ocurrió un error al eliminar cliente ID '.$client['cli_id']);
     }
+    public function connection_get($client_id){
+        $this->db->where('his_log_cli_id', $client_id);
+        $this->db->order_by('his_log_ultima_conexion', 'DESC');
+        $this->db->limit(5);
+
+        $result = $this->db->get('historial_login');
+        return $result->result_object();
+    }
 }
