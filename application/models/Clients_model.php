@@ -63,15 +63,15 @@ class Clients_model extends CI_Model{
         return $result->result_object();
     }
      public function connectionpermonth($year, $month ){
+     	$this->db->select('count(his_id) as total_conexiones' );
 	    $this->db->where('year(his_log_ultima_conexion)', date($year));
 	   	$this->db->where('month(his_log_ultima_conexion)', date($month));
 	    
-	    $this->db->order_by('his_log_ultima_conexion', 'DESC');
 	    $result = $this->db->get('historial_login');
 	    return $result->result_object();
     }
     public function total_clients(){
-    	$this->db->select('count(cli_id)');
+    	$this->db->select('count(cli_id) as total_clientes');
     	$this->db->from('clientes');
 	    $result = $this->db->get();
 	    return $result->result_object();
