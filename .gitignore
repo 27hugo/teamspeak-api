@@ -1,13 +1,10 @@
 .DS_Store
 
-application/config/
-/application/config/
+application/cache/*
+!application/cache/index.html
 
 application/config/*
 !application/config/index.html
-
-application/cache/*
-!application/cache/index.html
 
 application/logs/*
 !application/logs/index.html
