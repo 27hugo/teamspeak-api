@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . '/libraries/REST_Controller.php';
 
-class SteamApi extends REST_Controller{
+class Steamapi extends REST_Controller{
 
     private $authorization;
 
