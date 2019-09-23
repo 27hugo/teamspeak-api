@@ -5,13 +5,20 @@ require_once( APPPATH.'third_party/teamspeak3/TeamSpeak3.php' );
 
 class Teamspeak{
 
-    private $host = '';
-    private $username = '';
-    private $password = '';
-    private $port = '9987';
-    private $queryport = '10011';
+    private $host;
+    private $username;
+    private $password;
+    private $port;
+    private $queryport;
     
     public function __construct(){
+        $this->CI =& get_instance();
+        $this->CI->load->config('teamspeak');
+        $this->host = $this->CI->config->item('host');
+        $this->username = $this->CI->config->item('username');
+        $this->password = $this->CI->config->item('password');
+        $this->port = $this->CI->config->item('port');
+        $this->queryport = $this->CI->config->item('queryport');
         $uri = 'serverquery://'.$this->username.':'.$this->password.'@'.$this->host.':'.$this->queryport.'/?server_port='.$this->port;	
         $this->factory = TeamSpeak3::factory($uri);
     }
@@ -81,7 +88,7 @@ class Teamspeak{
                 $client['cli_ts_ip'] =  $connection_client_ip;
             }
         }
-        var_dump($client);
+        //var_dump($client);
         return $client;
     }
 }

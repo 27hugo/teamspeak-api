@@ -19,13 +19,14 @@ class AuthorizationToken {
      * ( 1 Day ) : 60 * 60 * 24 = 86400
      * ( 1 Hour ) : 60 * 60     = 3600
      */
-    protected $token_expire_time = 3600; 
+    protected $token_expire_time; 
 
     public function __construct(){
         $this->CI =& get_instance();
         $this->CI->load->config('jwt');
         $this->token_key        = $this->CI->config->item('jwt_key');
         $this->token_algorithm  = $this->CI->config->item('jwt_algorithm');
+        $this->token_expire_time = $this->CI->config->item('jwt_expire_time');
     }
 
     public function generateToken($data){
@@ -56,12 +57,12 @@ class AuthorizationToken {
                         return ['status' => FALSE, 'message' => 'No se definió el id del token.'];
 
                     // Check Token Time
-                    }else if(empty($token_decode->time OR !is_numeric($token_decode->time))) {
+                    }else if(empty($token_decode->iat OR !is_numeric($token_decode->iat))) {
                         return ['status' => FALSE, 'message' => 'No se definió la hora del token.'];
                     
                     }else{
                         // Check Token Time Valid 
-                        $time_difference = strtotime('now') - $token_decode->time;
+                        $time_difference = strtotime('now') - $token_decode->iat;
                         if( $time_difference >= $this->token_expire_time ){
                             return ['status' => FALSE, 'message' => 'El token ha expirado.'];
 

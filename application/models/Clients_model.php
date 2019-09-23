@@ -5,6 +5,7 @@ class Clients_model extends CI_Model{
     
     public function __construct(){
         parent::__construct();
+        date_default_timezone_set('America/Santiago');
     }
     
     public function get($client_id = null){
@@ -17,36 +18,13 @@ class Clients_model extends CI_Model{
         }
     
         $result = $this->db->get('clientes');
-        if ($result->num_rows() > 0) {
-            return $result->result_object();
-        }
-        throw new Exception('No hay clientes registrados');
+        return $result->result_object();
     }
     
-    public function registerClient( $client, $login ){
-        $this->db->trans_start();
-
-        $this->db->insert('clientes', $client );
-        $cli_id = $this->db->insert_id();
-        echo $cli_id;
-
-        $this->db->set('cli_uid', md5($cli_id));
-        $this->db->where('cli_id', $cli_id);
-        $this->db->update('clientes');
-
-        $login['log_cli_id'] = $cli_id;
-        $this->db->insert('login', $login);
-        
-        $this->db->trans_complete();
-        if($this->db->affected_rows() > 0)
-            return true;
-        throw new Exception('Ocrrio un error al registrar cliente');
-    }
-
     public function updateClient( $client ){  
         $this->db->set('cli_nombre', $client['cli_nombre'] );
         $this->db->set('cli_alias', $client['cli_alias'] );
-        $this->db->set('cli_pais', $client['cli_pais'] );
+        $this->db->set('cli_region', $client['cli_region'] );
         $this->db->set('cli_ciudad', $client['cli_ciudad'] );
         $this->db->set('cli_nacimiento', $client['cli_nacimiento'] ); 
         $this->db->where('cli_id', $client['cli_id']);
@@ -54,7 +32,7 @@ class Clients_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            throw new Exception('Ocurrió un error al actualizar cliente');
+            throw new Exception('Ocurrió un error al actualizar cliente ID '.$client['cli_id']);
     }
 
     
@@ -64,6 +42,44 @@ class Clients_model extends CI_Model{
         if( $this->db->affected_rows() === 1 )
             return $this->db->affected_rows();
         else
-            throw new Exception('Ocurrió un error al eliminar cliente');
+            throw new Exception('Ocurrió un error al eliminar cliente ID '.$client['cli_id']);
     }
+    public function lastConnections($client_id){
+        $this->db->where('his_log_cli_id', $client_id);
+        $this->db->order_by('his_log_ultima_conexion', 'DESC');
+        $this->db->limit(5);
+
+        $result = $this->db->get('historial_login');
+        return $result->result_object();
+    }
+    public function connectionsBetween($client){
+        $this->db->where('his_log_cli_id', $client['cli_id']);
+        $this->db->where('his_log_ultima_conexion >=', $client['first_date']);
+		$this->db->where('his_log_ultima_conexion <=', $client['second_date']);
+        $this->db->order_by('his_log_ultima_conexion', 'DESC');
+        $this->db->limit(5);
+
+        $result = $this->db->get('historial_login');
+        return $result->result_object();
+    }
+     public function connectionsPerMonth($year, $month ){
+     	$this->db->select('count(his_id) as total_conexiones' );
+	    $this->db->where('year(his_log_ultima_conexion)', date($year));
+	   	$this->db->where('month(his_log_ultima_conexion)', date($month));
+	    $result = $this->db->get('historial_login');
+	    return $result->row()->total_conexiones;
+    }
+    public function totalClients(){
+    	$this->db->select('count(cli_id) as total_clientes');
+    	$this->db->from('clientes');
+	    $result = $this->db->get();
+	    return $result->row()->total_clientes;
+    }
+
+    
 }
+
+
+
+
+
