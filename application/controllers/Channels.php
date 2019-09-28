@@ -10,8 +10,8 @@ class Channels extends REST_Controller{
     public function __construct(){
         parent::__construct();
         $this->load->model('channels_model');
-        $this->load->library('authorizationtoken');
-        $this->load->library('reply');
+        $this->load->library('AuthorizationToken');
+        $this->load->library('Reply');
         $this->authorization = $this->authorizationtoken->validateToken();
 
         if( $this->authorization['status'] == false)
