@@ -15,9 +15,9 @@ class Login extends REST_Controller{
         $this->connection_client_ip = $_SERVER['REMOTE_ADDR'];
         $this->load->model('login_model');
         $this->load->model('clients_model');
-        $this->load->library('authorizationtoken');
+        $this->load->library('AuthorizationToken');
         $this->load->library('encryption');
-        $this->load->library('reply');
+        $this->load->library('Reply');
         $this->encryption->initialize( array(
             'driver' => 'openssl',
             'cipher' => 'aes-256',
