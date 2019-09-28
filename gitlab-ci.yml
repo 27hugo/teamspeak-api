@@ -1,0 +1,10 @@
+stages:
+    - update
+
+init:
+    stage: update
+    script:
+        - echo 'Actualizando proyecto e instalando dependencias...'
+        - cd /var/www/owc.cl/teamspeak-api
+        - git pull http://$GIT_USER:$GIT_PASS@owc.cl:5000/teamspeak/teamspeak-api.git
+        - npm install
