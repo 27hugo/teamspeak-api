@@ -169,9 +169,10 @@ class Channels extends REST_Controller{
         try{
             $this->load->library('teamspeak');   
             $can_id = $this->teamspeak->createChannel($this->post('can_nombre'), $this->post('can_contrasena'));
-            $clientInfo = $this->teamspeak->getConnectedClientInfo();
+            //$clientInfo = $this->teamspeak->getConnectedClientInfo();
             $channel['can_id'] = $can_id;
-            $channel['can_cli_ts_id'] = $clientInfo['cli_ts_id'];
+            //$channel['can_cli_ts_id'] = $clientInfo['cli_ts_id'];
+            $channel['can_cli_ts_id'] = 1;
             $this->channels_model->createChannel($channel);
             $this->response( $this->reply->ok('El canal ha sido creado') , REST_Controller::HTTP_OK );
         }catch(Exception $e){
